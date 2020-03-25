@@ -24,6 +24,23 @@ def users():
 def submits():
     return render_template('submits.html')
 
+#--------->Login-Page<-------------------------#
+@app.route('/login',methods=['GET','POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] == 'abhinav' or request.form['password'] == 'abhinav@123':
+            return render_template('user.html',name='abhinav')
+        elif request.form['username'] == 'aneeq' or request.form['password'] == 'aneeq@123':
+            return render_template('user.html',name='aneeq')
+        elif  request.form['username'] == 'me' or request.form['password'] == 'me@123':
+            return render_template('user.html',name='Me')
+        else:
+            error = "Invalid credientials Please try again"
+    return render_template('login.html',error=error)
+
+
+
 #--------->for-instat-app-running-&-debug<------#
 if __name__ == "__main__":
     app.run(debug=True)
