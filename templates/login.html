@@ -12,12 +12,13 @@ Login
 {% block content %}
     <div class="container">
 
-      <form class="form-signin">
+      <form class="form-signin" action="" method="POST"> 
         <h2 class="form-signin-heading">Please sign in</h2>
         {{form.hidden_tag()}}
         {{ wtf.form_field(form.username) }}
         {{ wtf.form_field(form.password)}}
         {{wtf.form_field(form.remember)}}
+        {{wtf.csrf_token}}
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
       </form>
 
