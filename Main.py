@@ -16,7 +16,16 @@ import requests
 app = Flask(__name__,template_folder='templates')
 Bootstrap(app)
 
-
+#Login form creation in FlaskForm
+class LoginForm(FlaskForm):
+    username = StringField('username',validators=[InputRequired(),Length(min=4,max=15)])
+    password = PasswordField('password',validators=[InputRequired(),Length(min=8,max=80)])
+    remember = BooleanField('remember me')
+#Registration form Creation in FlaskForm
+class RegisterForm(FlaskForm):
+    email = StringField('email',validators=[InputRequired(),Email(message='Invalid email'),Length(max=50)])
+    username = StringField('username',validators=[InputRequired(),Length(min=4,max=15)])
+    password = PasswordField('password',validators=[InputRequired(),Length(min=8,max=80)])
 #--------->Taking-unique-Key<-------------------#
 app.secret_key = os.urandom(24)
 
@@ -24,14 +33,21 @@ app.secret_key = os.urandom(24)
 @app.route('/')
 def index():
     return render_template('index.html')
+
 #Login
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+
+    return render_template('login.html',form=form)
+
 #Signup
 @app.route('/signup',methods=['GET','POST'])
 def signup():
-    return render_template('signup.html')
+    form = RegisterForm()
+
+    return render_template('signup.html',form=form)
+
 #dashboard
 @app.route('/dashboard')
 def dashboard():
