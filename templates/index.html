@@ -5,7 +5,14 @@
     </title>
 {%endblock%}
 {%block body%}
+    {%if name%}
     <h1>
-        This is index
+        This is index for user {{name}}
     </h1>
+    {%else%}
+        <h1>
+            Login to get your session started
+        </h1>
+        <a href="/login">Login Here</a>
+    {%endif%}
 {%endblock%}

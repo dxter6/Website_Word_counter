@@ -13,7 +13,6 @@
         </h1>
         <form action="" method="POST">
             <input type="text" placeholder="Username" name="username" value="{{ request.form.username}}">
-            <input type="password" placeholder="Password" name="password" value="{{request.form.password}}">
             <input class="btn btn-default" type="submit" value="login">
         </form>
         {%if error%}
