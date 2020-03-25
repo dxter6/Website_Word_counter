@@ -97,7 +97,7 @@ def signup():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html',name=current_user.username)
 
 
 if __name__ == "__main__":

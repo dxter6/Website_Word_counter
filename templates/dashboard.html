@@ -1,3 +1,9 @@
+{% extends "bootstrap/base.html" %}
+
+{%block content%}
+{%if name%}
 <h1>
-  Just Empty blank
+  hello {{name}} Sorry it's a blank page
 </h1>
+{%endif%}
+{%endblock%}
