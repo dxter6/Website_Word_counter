@@ -11,6 +11,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,BooleanField
 from wtforms.validators import InputRequired,Email,Length
 from wtforms import ValidationError
+from werkzeug.security import generate_password_hash,check_password_hash
 import os
 import requests
 
@@ -63,7 +64,7 @@ def login():
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
         if user:
-            if user.password == form.password.data:
+            if check_password_hash(user.password,form.password.data):
                 return redirect(url_for('dashboard'))
         return "<h1>Invalid Credientials</h1>"
         # return form.username.data+" "+form.password.data
@@ -75,10 +76,11 @@ def login():
 def signup():
     form = RegisterForm()
     if form.validate_on_submit():
-       new_user = Users(username = form.username.data,email=form.email.data,password=form.password.data)
-       db.session.add(new_user)
-       db.session.commit()
-       return '<h1>New user Created</h1>'
+        hashed_password = generate_password_hash(form.password.data,method='sha256')
+        new_user = Users(username = form.username.data,email=form.email.data,password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        return '<h1>New user Created</h1>'
        # return form.username.data+" "+form.password.data+" "+form.email.data
     return render_template('signup.html',form=form)
 
