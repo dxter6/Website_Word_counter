@@ -1,22 +1,30 @@
-{%extends 'base.html'%}
+{% extends "bootstrap/base.html" %}
 
-{%block title%}
-<title>
-    login
-</title>
-{%endblock%}
+{% block title %}
+Login
+{% endblock %}
 
-{%block body%}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='signin.css')}}">
+{% endblock %}
+
+{% block content %}
     <div class="container">
-        <h1>
-            Login
-        </h1>
-        <form action="" method="POST">
-            <input type="text" placeholder="Username" name="username" value="{{ request.form.username}}">
-            <input class="btn btn-default" type="submit" value="login">
-        </form>
-        {%if error%}
-        <p class="error"><strong>Error:</strong>{{ error }}</p>
-        {%endif%}
-    </div>
-{%endblock%}
+
+      <form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputUsername" class="sr-only">Username</label>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+
+    </div> <!-- /container -->
+{% endblock %}

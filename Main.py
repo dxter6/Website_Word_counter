@@ -5,11 +5,17 @@ from flask import session
 from flask import redirect
 from flask import g
 from flask import url_for
+from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms import StringField,PasswordField,BooleanField
+from wtforms.validators import InputRequired,Email,Length
 import os
 import requests
 
 #-------->flask-intilization<-------------------#
 app = Flask(__name__,template_folder='templates')
+Bootstrap(app)
+
 
 #--------->Taking-unique-Key<-------------------#
 app.secret_key = os.urandom(24)
