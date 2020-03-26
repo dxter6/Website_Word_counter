@@ -7,6 +7,12 @@ Website_Word_counter
 {% block styles %}
 {{super()}}
 <link rel="stylesheet" href="{{url_for('.static', filename='starter-template.css')}}">
+<style>
+body {
+
+  background-color: #42c6ee;
+ }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -34,9 +40,10 @@ Website_Word_counter
 
     <div >
 
-      <div >
-        <h1>FUll Null</h1>
-        <p class="lead">Strating index home<br> just HTML document.</p>
+      <div class="container">
+        <h1 >
+              Welcome YOu HAve to LOgin Or SiGn Up To StArt AdDIng TAsKS 
+        </h1>
       </div>
 
     </div><!-- /.container -->
