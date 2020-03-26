@@ -26,6 +26,7 @@ from sqlalchemy import create_engine
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+## Config for database Sqlalchemy and database setup
 class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir,'app.db')
