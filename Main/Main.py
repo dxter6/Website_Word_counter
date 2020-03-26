@@ -19,6 +19,8 @@ from werkzeug.security import generate_password_hash,check_password_hash
 import os
 import requests
 from time import strftime
+from sqlalchemy import create_engine
+
 
 #-------------->Os-database-environment<--------#
 
@@ -47,6 +49,9 @@ rdis = redis.Redis()
 #Queue initilization
 queue = Queue(connection=rdis)
 
+# Create engine path Decleration
+engine = create_engine('sqlite:////home/jesus/proj/edyst-challenge/Main/database.db')
+
 # User calss
 # To create Database table in database if it is not existent you should first import
 # Do ---> from Main import db
@@ -67,6 +72,7 @@ class Results(db.Model):
     Enqueuedat = db.Column(db.String(100))
     Finishedat = db.Column(db.String(100))
     wordcount = db.Column(db.Integer)
+    Status = db.Column(db.String(20))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -127,7 +133,12 @@ def signup():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html',name=current_user.username)
+    
+    query = engine.execute('select * from results')
+    all_results = query.fetchall()
+
+    return render_template('dashboard.html',name=current_user.username,list_all= all_results)
+
 #Adding a task for url Fetching and word counting
 @app.route('/add-task',methods=['POST','GET'])
 @login_required
@@ -140,7 +151,7 @@ def add_task():
         task = queue.enqueue(count_words,form.username.data)
         jobs = queue.jobs
         queue_length = len(queue)
-        new_result = Results(time=strftime('%a, %d %b %Y %H:%M:%S'),username=current_user.username,url=form.username.data,jobId=task.id,Createdat=task.created_at.strftime('%a, %d %b %Y %H:%M:%S'),Enqueuedat=task.enqueued_at.strftime("%c"),Finishedat=strftime('%a, %d %b %Y %H:%M:%S'),wordcount=wordLength)
+        new_result = Results(time=strftime('%a, %d %b %Y %H:%M:%S'),username=current_user.username,url=form.username.data,jobId=task.id,Createdat=task.created_at.strftime('%a, %d %b %Y %H:%M:%S'),Enqueuedat=task.enqueued_at.strftime("%c"),Finishedat=strftime('%a, %d %b %Y %H:%M:%S'),Status="Success",wordcount=wordLength)
         db.session.add(new_result)
         db.session.commit()
         Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.Number of jobs = {queue_length} jobs Queued"
