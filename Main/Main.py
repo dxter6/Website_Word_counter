@@ -136,13 +136,14 @@ def add_task():
     jobs = queue.jobs
     Message = None
     if form.validate_on_submit():
+        wordLength = count_words(form.username.data)
         task = queue.enqueue(count_words,form.username.data)
         jobs = queue.jobs
         queue_length = len(queue)
-        new_result = Results(time=strftime('%c'),username=current_user.username,url=form.username.data,jobId=task.id,Createdat=task.created_at.strftime('%c'),Enqueuedat=task.enqueued_at.strftime("%c"),Finishedat=strftime('%c'),wordcount=count_words(form.username.data))
+        new_result = Results(time=strftime('%a, %d %b %Y %H:%M:%S'),username=current_user.username,url=form.username.data,jobId=task.id,Createdat=task.created_at.strftime('%a, %d %b %Y %H:%M:%S'),Enqueuedat=task.enqueued_at.strftime("%c"),Finishedat=strftime('%a, %d %b %Y %H:%M:%S'),wordcount=wordLength)
         db.session.add(new_result)
         db.session.commit()
-        Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.{queue_length} jobs Queued"
+        Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.Number of jobs = {queue_length} jobs Queued"
         return render_template('add_task.html',name=current_user.username,message=Message,jobs=jobs,form=form)
 
     return render_template('add_task.html',name=current_user.username,message=Message,jobs=jobs,form=form)
