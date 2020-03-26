@@ -22,6 +22,7 @@
 ```
 ## Points to  Note
 ```bash
+    0.Change the Directory for the sqlite 
     1. Create Database before running the application
     2. Sign-up before Sign-in
     3. To Run the application Goto /Main/ and Run Main.py
