@@ -1,28 +1,36 @@
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import session
-from flask import redirect
-from flask import g
-from rq import Queue
-import redis
-from task.tasks import count_words
-from flask import url_for
-from flask_login import LoginManager,UserMixin,login_user,login_required,logout_user,current_user
-from flask_sqlalchemy import SQLAlchemy
-from flask_bootstrap import Bootstrap
-from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,BooleanField
-from wtforms.validators import InputRequired,Email,Length
-from wtforms import ValidationError
-from werkzeug.security import generate_password_hash,check_password_hash
-import os
-import requests
-from time import strftime
-from sqlalchemy import create_engine
+try :
+    from flask import Flask
+    from flask import render_template
+    from flask import request
+    from flask import session
+    from flask import redirect
+    from flask import g
+    from rq import Queue
+    import redis
+    from task.tasks import count_words
+    from flask import url_for
+    from flask_login import LoginManager,UserMixin,login_user,login_required,logout_user,current_user
+    from flask_sqlalchemy import SQLAlchemy
+    from flask_bootstrap import Bootstrap
+    from flask_wtf import FlaskForm
+    from wtforms import StringField,PasswordField,BooleanField
+    from wtforms.validators import InputRequired,Email,Length
+    from wtforms import ValidationError
+    from werkzeug.security import generate_password_hash,check_password_hash
+    import os
+    import requests
+    from time import strftime
+    from sqlalchemy import create_engine
+
+except ModuleNotFoundError:
+    import os
+    import sys
+    os.system('pip3 install flask redis rq flask_wtf flask_sqlalchemy requests flask_login flask_bootstrap')
+    print("try restarting the program")
+    sys.exit()
 
 
-#-------------->Os-database-environment<--------#
+#--------------Os-database-environment<--------#
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -36,7 +44,7 @@ class Config(object):
 app = Flask(__name__,template_folder='templates')
 Bootstrap(app)
 #app.config.from_object(Config)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/jesus/proj/edyst-challenge/Main/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/database/database.db'
 db = SQLAlchemy(app)
 # Flask_login manager
 login_manager = LoginManager()
@@ -51,7 +59,7 @@ rdis = redis.Redis()
 queue = Queue(connection=rdis)
 
 # Create engine path Decleration
-engine = create_engine('sqlite:////home/jesus/proj/edyst-challenge/Main/database.db')
+engine = create_engine('sqlite:////tmp/database/database.db')
 
 # User calss
 # To create Database table in database if it is not existent you should first import
@@ -168,4 +176,4 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host='172.17.0.2',port='5000')
