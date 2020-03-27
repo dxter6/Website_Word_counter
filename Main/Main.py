@@ -1,34 +1,28 @@
-try:
-    from flask import Flask
-    from flask import render_template
-    from flask import request
-    from flask import session
-    from flask import redirect
-    from flask import g
-    from rq import Queue
-    import redis
-    from task.tasks import count_words
-    from flask import url_for
-    from flask_login import LoginManager,UserMixin,login_user,login_required,logout_user,current_user
-    from flask_sqlalchemy import SQLAlchemy
-    from flask_bootstrap import Bootstrap
-    from flask_wtf import FlaskForm
-    from wtforms import StringField,PasswordField,BooleanField
-    from wtforms.validators import InputRequired,Email,Length
-    from wtforms import ValidationError
-    from werkzeug.security import generate_password_hash,check_password_hash
-    import os
-    import requests
-    from time import strftime
-    from sqlalchemy import create_engine
-    import time
 
-except ModuleNotFoundError:
-    import os
-    import sys
-    os.system('pip3 install flask redis rq flask_wtf flask_sqlalchemy requests flask_login flask_bootstrap')
-    print("try restarting the program")
-    sys.exit()
+from flask import Flask
+from flask import render_template
+from flask import request
+from flask import session
+from flask import redirect
+from flask import g
+from rq import Queue
+import redis
+from task.tasks import count_words
+from flask import url_for
+from flask_login import LoginManager,UserMixin,login_user,login_required,logout_user,current_user
+from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms import StringField,PasswordField,BooleanField
+from wtforms.validators import InputRequired,Email,Length
+from wtforms import ValidationError
+from werkzeug.security import generate_password_hash,check_password_hash
+import os
+import requests
+from time import strftime
+from sqlalchemy import create_engine
+import time
+
 
 #--------------Os-database-environment<--------#
 
