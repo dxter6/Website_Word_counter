@@ -21,6 +21,7 @@ try:
     import requests
     from time import strftime
     from sqlalchemy import create_engine
+    import time
 
 except ModuleNotFoundError:
     import os
@@ -28,7 +29,6 @@ except ModuleNotFoundError:
     os.system('pip3 install flask redis rq flask_wtf flask_sqlalchemy requests flask_login flask_bootstrap')
     print("try restarting the program")
     sys.exit()
-os.system('mkdir -p /tmp/database ')
 
 #--------------Os-database-environment<--------#
 
@@ -79,6 +79,7 @@ class Results(db.Model):
     Enqueuedat = db.Column(db.String(100))
     wordcount = db.Column(db.Integer)
     Status = db.Column(db.String(20))
+    Time_taken = db.Column(db.String(20))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -87,13 +88,13 @@ def load_user(user_id):
 #Login form creation in FlaskForm
 class LoginForm(FlaskForm):
     username = StringField('username',validators=[InputRequired(),Length(min=4,max=15)])
-    password = PasswordField('password',validators=[InputRequired(),Length(min=8,max=80)])
+    password = PasswordField('password',validators=[InputRequired(),Length(min=8,max=200)])
     remember = BooleanField('remember me')
 #Registration form Creation in FlaskForm
 class RegisterForm(FlaskForm):
     email = StringField('email',validators=[InputRequired(),Email(message='Invalid email'),Length(max=50)])
     username = StringField('username',validators=[InputRequired(),Length(min=4,max=15)])
-    password = PasswordField('password',validators=[InputRequired(),Length(min=8,max=80)])
+    password = PasswordField('password',validators=[InputRequired(),Length(min=8,max=200)])
 
 #Url taking Form
 class UrlForm(FlaskForm):
@@ -131,7 +132,7 @@ def signup():
         new_user = Users(username = form.username.data,email=form.email.data,password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        return '<h1>New user Created</h1>'
+        return render_template('login.html',message="Record Created Login to continue",form=None)
        # return form.username.data+" "+form.password.data+" "+form.email.data
     return render_template('signup.html',form=form)
 
@@ -153,11 +154,14 @@ def add_task():
     jobs = queue.jobs
     Message = None
     if form.validate_on_submit():
+        start = time.time()
         wordLength = count_words(form.url.data)
         task = queue.enqueue(count_words,form.url.data)
         jobs = queue.jobs
         queue_length = len(queue)
-        new_result = Results(username=current_user.username,url=form.url.data,jobId=task.id,Enqueuedat=task.enqueued_at.strftime("%c"),Status="Success",wordcount=wordLength)
+        end = time.time()
+        elapsed_time = end - start
+        new_result = Results(username=current_user.username,url=form.url.data,jobId=task.id,Enqueuedat=task.enqueued_at.strftime("%c"),Status="Success",wordcount=wordLength,Time_taken=elapsed_time)
         db.session.add(new_result)
         db.session.commit()
         Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.Number of jobs = {queue_length} jobs Queued"
