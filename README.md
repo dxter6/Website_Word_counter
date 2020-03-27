@@ -4,30 +4,23 @@
 ##### Introduction To [Website_Word_counter..!](https://github.com/shinu007/Website_Word_counter)
 
 
-## Before stating the application install the requirements.txt
-
-```pip3
-    pip3 install  -r requirements.txt
-```
 ## Linux  Needed Packages
 ```bash
  # apt-package manager
  $ sudo apt-get insall redis sqlite  
 ```
-## To create database go to /Main 
-```python3
-    $python3
-    >> from Main import db
-    >> db.create_all()
+## To Setup and Run
+```bash
+    ./setup.sh
+    ./start.sh
 ```
 ## Points to  Note
-```bash
-    0.Change the Directory for the sqlite 
-    1. Create Database before running the application
+```bash 
+    0. Start the Redis server and rq 
+    1. Run setup.sh before Starting the application
     2. Sign-up before Sign-in
-    3. To Run the application Goto /Main/ and Run Main.py
-    4. Login before you add the tasks
-    5. Start the Redis server  and rq worker before adding the tasks
+    3. Login before you add the tasks
+    
 ``` 
 ## To Start Web_application
 ```bash

@@ -160,7 +160,7 @@ def add_task():
         task = queue.enqueue(count_words,form.url.data)
         jobs = queue.jobs
         queue_length = len(queue)
-        new_result = Results(time=strftime('%a, %d %b %Y %H:%M:%S'),username=current_user.username,url=form.url.data,jobId=task.id,Createdat=task.created_at.strftime('%a, %d %b %Y %H:%M:%S'),Enqueuedat=task.enqueued_at.strftime("%c"),Finishedat=strftime('%a, %d %b %Y %H:%M:%S'),Status="Success",wordcount=wordLength)
+        new_result = Results(time=strftime('%a, %d %b %Y %H:%M:%S'),username=current_user.username,url=form.url.data,jobId=task.id,Createdat=task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S'),Enqueuedat=task.enqueued_at.strftime("%c"),Finishedat=task.ended_at.strftime('%a, %d %b %Y %H:%M:%S'),Status="Success",wordcount=count_words(form.url.data))
         db.session.add(new_result)
         db.session.commit()
         Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.Number of jobs = {queue_length} jobs Queued"
