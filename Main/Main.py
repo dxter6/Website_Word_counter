@@ -73,13 +73,10 @@ class Users(UserMixin,db.Model):
 # Task class
 class Results(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    time = db.Column(db.String)
     username = db.Column(db.String(50))
     url= db.Column(db.String(100))
     jobId = db.Column(db.String(1000),unique=True)
-    Createdat = db.Column(db.String(100))
     Enqueuedat = db.Column(db.String(100))
-    Finishedat = db.Column(db.String(100))
     wordcount = db.Column(db.Integer)
     Status = db.Column(db.String(20))
 
@@ -143,7 +140,7 @@ def signup():
 @login_required
 def dashboard():
     
-    query = engine.execute('select * from results')
+    query = engine.execute('select * from results ')
     all_results = query.fetchall()
 
     return render_template('dashboard.html',name=current_user.username,list_all= all_results)
@@ -160,7 +157,7 @@ def add_task():
         task = queue.enqueue(count_words,form.url.data)
         jobs = queue.jobs
         queue_length = len(queue)
-        new_result = Results(time=strftime('%a, %d %b %Y %H:%M:%S'),username=current_user.username,url=form.url.data,jobId=task.id,Createdat=task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S'),Enqueuedat=task.enqueued_at.strftime("%c"),Finishedat=task.ended_at.strftime('%a, %d %b %Y %H:%M:%S'),Status="Success",wordcount=count_words(form.url.data))
+        new_result = Results(username=current_user.username,url=form.url.data,jobId=task.id,Enqueuedat=task.enqueued_at.strftime("%c"),Status="Success",wordcount=wordLength)
         db.session.add(new_result)
         db.session.commit()
         Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.Number of jobs = {queue_length} jobs Queued"
