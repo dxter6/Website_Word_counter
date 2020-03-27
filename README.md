@@ -7,7 +7,7 @@
 ## Linux  Needed Packages
 ```bash
  # apt-package manager
- $ sudo apt-get insall redis sqlite  
+ $ sudo ./packages.sh
 ```
 ## To Setup and Run
 ```bash
