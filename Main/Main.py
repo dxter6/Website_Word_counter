@@ -28,7 +28,7 @@ except ModuleNotFoundError:
     os.system('pip3 install flask redis rq flask_wtf flask_sqlalchemy requests flask_login flask_bootstrap')
     print("try restarting the program")
     sys.exit()
-
+os.system('mkdir -p /tmp/database ')
 
 #--------------Os-database-environment<--------#
 
