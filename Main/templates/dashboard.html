@@ -35,7 +35,7 @@ table#t01 th {
 {% endblock %}
 
 {%block content%}
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<!--nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -53,10 +53,10 @@ table#t01 th {
         <li class="active"><a href="{{url_for('dashboard')}}">Dashboard</a></li>
         <li><a href="{{url_for('logout')}}">Logout</a></li>
       </ul>
-    </div><!--/.nav-collapse -->
+    </div><!--/.nav-collapse >
   </div>
 </nav>
-</div>
+</div -->
 
 <nav>
   <div class="container" >
@@ -89,6 +89,8 @@ table#t01 th {
           <td>WORD_COUNT</td>
           <td>Status</td>
           <td>Time taken(Seconds)</td>
+          <td>Status</td>
+          <td>Error Description</td>
         </tr>
       {%for rows in list_all%}
         <tr>  

@@ -74,6 +74,8 @@ class Results(db.Model):
     wordcount = db.Column(db.Integer)
     Status = db.Column(db.String(20))
     Time_taken = db.Column(db.String(20))
+    Errors = db.Column(db.String(30))
+    Error_description = db.Column(db.String(200))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -111,8 +113,10 @@ def login():
         if user:
             if check_password_hash(user.password,form.password.data):
                 login_user(user,remember=form.remember.data)
-                return redirect(url_for('dashboard'))
-        return "<h1>Invalid Credientials</h1>"
+                return render_template('frameset.html')
+            else:
+                return "<h1>Invalid Credientials</h1>"
+        
         # return form.username.data+" "+form.password.data
 
     return render_template('login.html',form=form)
@@ -149,13 +153,44 @@ def add_task():
     Message = None
     if form.validate_on_submit():
         start = time.time()
+        https = form.url.data[0:8]
+        http = form.url.data[0:7]
+        boolean = False
+        if http == "http://":
+            boolean = True
+        elif https == "https://":
+            boolean = True
+        if not boolean:
+            return render_template('add_task.html',name=current_user.username,message="Enter Full url with Http and https",jobs=jobs,form=form)
+        try:
+            r = requests.get(form.url.data)
+        except (requests.exceptions.ConnectionError,requests.ConnectionError,requests.ConnectTimeout) as v:
+            return render_template('add_task.html',name=current_user.username,message="Enter a valid Url",jobs=jobs,form=form)
+        r = requests.get(form.url.data)
+        status = ""
+        error = ""
+        error_desc = ""
+        try:
+            r.raise_for_status()
+        except (requests.exceptions.BaseHTTPError,requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout,requests.exceptions.InvalidProxyURL,requests.exceptions.RetryError,requests.exceptions.URLRequired,requests.exceptions.HTTPError) as v:
+            error_desc = str(v)
+        
+        if r.status_code == 200:
+            status = "Success"
+            error = r.status_code
+            error_desc = "None"
+        else:
+            status = "Error"
+            error = str(r.status_code)
+              
+            
         wordLength = count_words(form.url.data)
         task = queue.enqueue(count_words,form.url.data)
         jobs = queue.jobs
         queue_length = len(queue)
         end = time.time()
         elapsed_time = end - start
-        new_result = Results(username=current_user.username,url=form.url.data,jobId=task.id,Enqueuedat=task.enqueued_at.strftime("%c"),Status="Success",wordcount=wordLength,Time_taken=elapsed_time)
+        new_result = Results(username=current_user.username,url=form.url.data,jobId=task.id,Enqueuedat=task.enqueued_at.strftime("%c"),Status=status,wordcount=wordLength,Time_taken=elapsed_time,Errors=error,Error_description=error_desc)
         db.session.add(new_result)
         db.session.commit()
         Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.Number of jobs = {queue_length} jobs Queued"
