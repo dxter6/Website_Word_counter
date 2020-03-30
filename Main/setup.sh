@@ -26,7 +26,7 @@ echo "Installing the required packages"
 
 pip3 install -r requirements.txt
 
-if [ ! -d  "$database"]
+if [ ! -d  "$database" ]
 then
 	echo "Setting up the Database"
 	python $present/database.py
