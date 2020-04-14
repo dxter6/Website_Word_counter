@@ -31,8 +31,15 @@ body {
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
             <li></li>
+            {%if not name%}
             <li><a href="{{ url_for('login') }}">Login</a></li>
+          
             <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            {%else%}
+            <li class="active"><a href="{{url_for('add_task')}}">Add_task</a></li>
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+            {%endif%}
+
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -41,9 +48,15 @@ body {
     <div >
 
       <div class="container">
+        {%if not name%}
         <h1 >
               Welcome YOu HAve to LOgin Or SiGn Up To StArt AdDIng TAsKS 
         </h1>
+        {%else%}
+        <h1 >
+          Welcome {{ name }} YOu HAve Goto  AdDIng TAsKS to add TAsKS
+        </h1>
+        {%endif%}
       </div>
 
     </div><!-- /.container -->

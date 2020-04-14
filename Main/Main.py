@@ -113,7 +113,8 @@ def login():
         if user:
             if check_password_hash(user.password,form.password.data):
                 login_user(user,remember=form.remember.data)
-                return render_template('frameset.html')
+                form = UrlForm()
+                return render_template('index.html',name=current_user.username)
             else:
                 return "<h1>Invalid Credientials</h1>"
         
@@ -142,7 +143,7 @@ def dashboard():
     query = engine.execute('select * from results ')
     all_results = query.fetchall()
 
-    return render_template('dashboard.html',name=current_user.username,list_all= all_results)
+    return render_template('add_task.html',name=current_user.username,list_all= all_results)
 
 #Adding a task for url Fetching and word counting
 @app.route('/add-task',methods=['POST','GET'])
@@ -194,9 +195,12 @@ def add_task():
         db.session.add(new_result)
         db.session.commit()
         Message = f"Task is Queued at {task.enqueued_at.strftime('%a, %d %b %Y %H:%M:%S')}.Number of jobs = {queue_length} jobs Queued"
-        return render_template('add_task.html',name=current_user.username,message=Message,jobs=jobs,form=form)
-
-    return render_template('add_task.html',name=current_user.username,message=Message,jobs=jobs,form=form)
+        query = engine.execute('select * from results ')
+        all_results = query.fetchall()
+        return render_template('add_task.html',name=current_user.username,message=Message,jobs=jobs,form=form,list_all= all_results)
+    query = engine.execute('select * from results ')
+    all_results = query.fetchall()
+    return render_template('add_task.html',name=current_user.username,message=Message,jobs=jobs,form=form,list_all= all_results)
 
 #Logout
 @app.route('/logout')

@@ -12,14 +12,38 @@ Job queue
 
 <!-- Bootstrap CSS -->
 <!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"-->
-<link rel="stylesheet" href="{{url_for('.static', filename='starter-template.css')}}">
+
 <meta charset="utf-8">
+<link rel="stylesheet" href="{{url_for('.static', filename='starter-template.css')}}">
 <style>
-  body {
-  
-    background-color: whitesmoke;
-   }
+  table {
+  width:100%;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+  text-align: left;
+}
+table#t01 tr:nth-child(even) {
+  background-color: #eee;
+}
+table#t01 tr:nth-child(odd) {
+ background-color: #fff;
+}
+table#t01 th {
+  background-color: black;
+  color: white;
+}
   </style>
+  <style>
+    body {
+    
+      background-color: #cccc;
+     }
+    </style>
 {% endblock %}
 
 {%block content%}
@@ -81,5 +105,55 @@ Job queue
       </div>
     </div>
   </div>
+  
+</nav>
+  <div class="container" >
+    
+    {%if name%}
+    
+    <h1>Welcome {{ name }}</h1>
+      {%if not list_all%}
+      <p class="lead">
+      hello {{name}} Sorry it's a blank page
+      
+      </p>
+      
+      <p class="lead"> 
+        To See the results You Need to add some Tasks {{name}}  
+      </p class="lead">
+      <p class="lead">
+        You can Add them in Add_tasks
+      </p>
+      {%endif%}
+      {%if list_all%}
+      <h1>These are Your results</h1>
+      <table style="width:auto" id="t01">
+        <tr>
+          <td>ID</td>
+          <td>USERNAME</td>
+          <td>URL</td>
+          <td>JOB_ID</td>
+          <td>ELAPSED_AT Time (UTC) </td>
+          <td>WORD_COUNT</td>
+          <td>Status</td>
+          <td>Time taken(Seconds)</td>
+          <td>Status</td>
+          <td>Error Description</td>
+        </tr>
+      {%for rows in list_all%}
+        <tr>  
+      {%for col in rows%}
+          <td>{{col}}</td>
+        {%endfor%}
+        </tr>
+      {%endfor%}
+      </table>
+      {%endif%}
+    {%endif%}
+    </div>
+
+  </div><!-- /.container -->
+</nav>
+
 
   {%endblock%}
